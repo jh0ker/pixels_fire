@@ -66,7 +66,7 @@ class Basegame:
                 new = pygame.Surface((1, 10))
                 h = random.randint(0, 50)
                 s = random.randint(80, 100)
-                v = random.randint(80, 100)
+                v = random.randint(40, 80)
                 c = pygame.Color(0)
                 c.hsva = (h, s, v, 1)
                 new.fill(c)
