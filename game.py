@@ -64,9 +64,9 @@ class Basegame:
             newsprites = []
             for x in range(screen.get_width()):
                 new = pygame.Surface((1, 10))
-                h = random.randint(0, 50)
+                h = random.randint(0, 30)
                 s = random.randint(80, 100)
-                v = random.randint(40, 80)
+                v = random.randint(30, 50)
                 c = pygame.Color(0)
                 c.hsva = (h, s, v, 1)
                 new.fill(c)
