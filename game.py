@@ -36,8 +36,11 @@ class Basegame:
         self.screen = pygame.Surface(size)
 
         self.ticks = 0
-        self.fps = 30
+        self.fps = 10
         self.gameover = False
+
+        self.sprites = []
+
 
     # Draws the surface onto the display(s)
     def update_screen(self, surface):
@@ -48,15 +51,43 @@ class Basegame:
     def update(self):
         screen = self.screen
 
-        # Count ticks independently of time so the timings won't mess up if the CPU is slow (you don't HAVE to use this,
+        # Count ticks independently of time so the timings won't mess up if the
+        # CPU is slow (you don't HAVE to use this,
         # but I recommend it, since I had problems with this
         self.ticks += 1
         ticks = self.ticks
 
-        # Example
-        pixel = pygame.Surface((1, 1))
-        pixel.fill(pygame.Color(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)))
-        screen.blit(pixel, (random.randint(0, 89), random.randint(0, 19)))
+        self.screen.fill(pygame.Color(0, 0, 0))
+
+        # generate new layer
+        if ticks % 3 is 0:
+            newsprites = []
+            for x in range(screen.get_width()):
+                new = pygame.Surface((1, 10))
+                h = random.randint(0, 50)
+                s = random.randint(80, 100)
+                v = random.randint(80, 100)
+                c = pygame.Color(0)
+                c.hsva = (h, s, v, 1)
+                new.fill(c)
+                newsprites.append([new, [x, 21], c])  # [sprite, [x, y], color]
+                pass # generate new fire
+            if len(self.sprites) > random.randint(8, 12):
+                self.sprites.pop(0)
+            self.sprites.append(newsprites)
+
+        for sprites in self.sprites:
+            for sprite in sprites:
+                # decrease size
+                new_size = sprite[0].get_height() - random.randint(0, 2)
+                if new_size < 0:
+                    sprites.remove(sprite)
+                    continue
+                # move sprite upwards
+                sprite[1][1] -= random.randint(0, 3)
+                sprite[0] = pygame.Surface((1, new_size))
+                sprite[0].fill(sprite[2])
+                screen.blit(sprite[0], sprite[1])
 
         # Print fps
         if ticks % self.fps == 0:
@@ -75,41 +106,6 @@ class Basegame:
             # End the game
             if event.button == EXIT:
                 self.gameover = True
-
-            # Keypresses on keyboard and joystick axis motions / button presses
-            if event.player == PLAYER1:
-                if event.type == PUSH:
-                    # Joysticks
-                    if event.button == UP:
-                        pass
-                    elif event.button == DOWN:
-                        pass
-                    elif event.button == RIGHT:
-                        pass
-                    elif event.button == LEFT:
-                        pass
-
-                    # Buttons
-                    elif event.button == B1:
-                        pass
-                    elif event.button == B2:
-                        pass
-                    elif event.button == B3:
-                        pass
-                # Same stuff here
-                elif event.type == RELEASE:
-                    pass
-
-            # Same stuff here
-            elif event.player == PLAYER2:
-                pass
-
-            # Player buttons
-            elif event.button == P1:
-                pass
-            elif event.button == P2:
-                pass
-
 
     def main(self):
 
